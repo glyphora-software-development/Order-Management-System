@@ -1,0 +1,272 @@
+
+.master-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.master-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.master-heading h1 {
+  font-size: 23px;
+  margin: 0 0 7px;
+  color: #172338;
+}
+
+.master-heading p {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.master-primary {
+  background: #2563eb;
+  color: white;
+  border: 1px solid #2563eb;
+  border-radius: 5px;
+  padding: 10px 16px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.master-primary:hover {
+  background: #1d4ed8;
+}
+
+.master-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 16px;
+  align-items: start;
+}
+
+.master-list-panel,
+.master-editor {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Search toolbar */
+
+.master-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.master-toolbar input {
+  width: 100%;
+  max-width: 350px;
+  min-width: 0;
+  height: 37px;
+  border: 1px solid #dce3eb;
+  border-radius: 5px;
+  padding: 0 12px;
+  font-size: 12px;
+  background: #ffffff;
+  color: #1e293b;
+}
+
+.master-toolbar span {
+  font-size: 11px;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* Data table */
+
+.master-table-scroll {
+  overflow-x: auto;
+}
+
+.master-table {
+  width: 100%;
+  min-width: 590px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+}
+
+.master-table thead {
+  background: #f8fafc;
+}
+
+.master-table th {
+  color: #64748b;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.master-table th,
+.master-table td {
+  padding: 14px 15px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.master-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.master-name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.master-sku {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.master-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.master-row-actions button {
+  border: none;
+  padding: 5px;
+  background: transparent;
+  color: #2563eb;
+  font-size: 12px;
+}
+
+.master-row-actions .master-danger-text {
+  color: #dc2626;
+}
+
+.master-status {
+  padding: 5px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.master-status.enabled {
+  color: #15803d;
+  background: #dcfce7;
+}
+
+.master-status.disabled {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+.master-empty {
+  text-align: center;
+  padding: 70px 20px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Editor */
+
+.master-editor-title {
+  padding: 20px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.master-editor-title h2 {
+  font-size: 15px;
+  margin: 0 0 7px;
+}
+
+.master-editor-title p {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.master-form {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  padding: 20px;
+}
+
+.master-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.master-form label > span {
+  display: inline;
+  color: #ef4444;
+}
+
+.master-form input,
+.master-form select,
+.master-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid #dce3eb;
+  border-radius: 5px;
+  background: white;
+  color: #1e293b;
+  font-size: 12px;
+  font-weight: 400;
+  outline: none;
+}
+
+.master-form input:focus,
+.master-form select:focus,
+.master-form textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px #dbeafe;
+}
+
+.master-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.master-form-actions button:not(.master-primary) {
+  background: #ffffff;
+  border: 1px solid #dce3eb;
+  border-radius: 5px;
+  padding: 10px 16px;
+  color: #334155;
+  font-size: 12px;
+}
+
+.master-error,
+.master-success {
+  padding: 10px 12px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin: 0;
+}
+
+.master-error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.master-success {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+@media (max-width: 1100px) {
+  .master-layout {
+    grid-template-columns: 1fr;
+  }
+}
