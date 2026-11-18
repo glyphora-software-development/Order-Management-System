@@ -130,6 +130,7 @@ function NewOrder() {
 
     try {
       createOrder({
+        customerId: selectedCustomer.id,
         customer: selectedCustomer.name,
         date,
         items: items.map(

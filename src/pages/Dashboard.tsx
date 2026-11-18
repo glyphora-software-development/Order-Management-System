@@ -1,50 +1,52 @@
 
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
+import {
+  getOrders,
+  formatMoney,
+  statusLabels,
+} from "../services/orderStorage";
 import "./Dashboard.css";
 
-const orders = [
-  {
-    id: "ORD-1001",
-    customer: "Alex Tan",
-    date: "2026-11-17",
-    amount: "RM 250.00",
-    status: "已完成",
-    tone: "completed",
-  },
-  {
-    id: "ORD-1002",
-    customer: "Sarah Lee",
-    date: "2026-11-17",
-    amount: "RM 480.00",
-    status: "待处理",
-    tone: "pending",
-  },
-  {
-    id: "ORD-1003",
-    customer: "Jason Wong",
-    date: "2026-11-16",
-    amount: "RM 120.00",
-    status: "处理中",
-    tone: "processing",
-  },
-  {
-    id: "ORD-1004",
-    customer: "Emily Lim",
-    date: "2026-11-16",
-    amount: "RM 560.00",
-    status: "已完成",
-    tone: "completed",
-  },
-];
-
-const summary = [
-  { label: "今日订单", value: "12", note: "今日创建订单" },
-  { label: "待处理", value: "24", note: "等待处理的订单" },
-  { label: "处理中", value: "8", note: "正在跟进" },
-  { label: "今日销售额", value: "RM 3,420", note: "今日销售金额" },
-];
+function todayString(): string {
+  const now = new Date();
+  const local = new Date(
+    now.getTime() - now.getTimezoneOffset() * 60000
+  );
+  return local.toISOString().slice(0, 10);
+}
 
 function Dashboard() {
+  const { recentOrders, summary, counts } = useMemo(() => {
+    const orders = getOrders();
+    const today = todayString();
+
+    const todayOrders = orders.filter((o) => o.date === today);
+    // 销售额不含草稿和已取消的订单
+    const todaySales = todayOrders
+      .filter((o) => o.status !== "draft" && o.status !== "cancelled")
+      .reduce((sum, o) => sum + o.total, 0);
+
+    const counts = {
+      draft: orders.filter((o) => o.status === "draft").length,
+      pending: orders.filter((o) => o.status === "pending").length,
+      processing: orders.filter((o) => o.status === "processing").length,
+    };
+
+    const recentOrders = [...orders]
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .slice(0, 5);
+
+    const summary = [
+      { label: "今日订单", value: String(todayOrders.length), note: "今日日期的订单" },
+      { label: "待确认", value: String(counts.pending), note: "等待确认的订单" },
+      { label: "处理中", value: String(counts.processing), note: "正在跟进" },
+      { label: "今日销售额", value: formatMoney(todaySales), note: "不含草稿和已取消" },
+    ];
+
+    return { recentOrders, summary, counts };
+  }, []);
+
   return (
     <div className="sales-dashboard">
       <div className="sales-page-heading">
@@ -57,7 +59,7 @@ function Dashboard() {
         </div>
 
         <span className="sales-demo-label">
-          演示数据
+          本地演示数据
         </span>
       </div>
 
@@ -113,15 +115,17 @@ function Dashboard() {
               </thead>
 
               <tbody>
-                {orders.map((order) => (
+                {recentOrders.map((order) => (
                   <tr key={order.id}>
                     <td className="sales-order-id">{order.id}</td>
                     <td>{order.customer}</td>
                     <td>{order.date}</td>
-                    <td className="sales-money">{order.amount}</td>
+                    <td className="sales-money">
+                      {formatMoney(order.total)}
+                    </td>
                     <td>
-                      <span className={`sales-status ${order.tone}`}>
-                        {order.status}
+                      <span className={`sales-status ${order.status}`}>
+                        {statusLabels[order.status]}
                       </span>
                     </td>
                   </tr>
@@ -130,9 +134,16 @@ function Dashboard() {
             </table>
           </div>
 
-          <div className="sales-panel-footer">
-            共显示 {orders.length} 条订单
-          </div>
+          {recentOrders.length === 0 && (
+            <div className="sales-panel-footer">
+              暂无订单，<Link to="/orders/new">新建第一张订单</Link>
+            </div>
+          )}
+          {recentOrders.length > 0 && (
+            <div className="sales-panel-footer">
+              显示最近 {recentOrders.length} 条订单
+            </div>
+          )}
         </section>
 
         <aside className="sales-side-panel">
@@ -146,7 +157,7 @@ function Dashboard() {
           <div className="sales-reminder">
             <span className="sales-reminder-indicator amber" />
             <div>
-              <strong>24 笔订单待处理</strong>
+              <strong>{counts.pending} 笔订单待确认</strong>
               <p>请及时确认客户订单</p>
             </div>
           </div>
@@ -154,7 +165,7 @@ function Dashboard() {
           <div className="sales-reminder">
             <span className="sales-reminder-indicator blue" />
             <div>
-              <strong>8 笔订单处理中</strong>
+              <strong>{counts.processing} 笔订单处理中</strong>
               <p>查看订单的最新进度</p>
             </div>
           </div>
@@ -162,8 +173,8 @@ function Dashboard() {
           <div className="sales-reminder">
             <span className="sales-reminder-indicator green" />
             <div>
-              <strong>订单资料维护</strong>
-              <p>核对订单信息与客户资料</p>
+              <strong>{counts.draft} 张草稿未提交</strong>
+              <p>完善后可提交为待确认订单</p>
             </div>
           </div>
 

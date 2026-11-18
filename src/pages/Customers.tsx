@@ -6,6 +6,7 @@ import {
   deleteCustomer,
   type Customer,
 } from "../services/masterDataStorage";
+import { countOrdersForCustomer } from "../services/orderStorage";
 import "./MasterData.css";
 
 type CustomerForm = Pick<
@@ -84,6 +85,15 @@ function Customers() {
   }
 
   function handleDelete(customer: Customer) {
+    const orderCount = countOrdersForCustomer(customer);
+    if (orderCount > 0) {
+      setMessage("");
+      setError(
+        `客户「${customer.name}」已有 ${orderCount} 张订单，不能删除`
+      );
+      return;
+    }
+
     if (
       !window.confirm(`确定删除客户「${customer.name}」吗？`)
     ) {

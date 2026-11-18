@@ -22,8 +22,7 @@ function Login({ onLogin }: LoginProps) {
 
     setError("");
 
-    // 前端演示：不验证密码
-    // 正式版本在这里调用 ASP.NET Core 登录 API
+    // 演示版本：不验证密码，登录状态也不会持久化
     onLogin(username.trim());
   }
 

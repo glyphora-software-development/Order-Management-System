@@ -257,6 +257,21 @@
   color: #1d4ed8;
 }
 
+.sales-status.draft {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.sales-status.confirmed {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.sales-status.cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
 .sales-panel-footer {
   padding: 13px 20px;
   font-size: 11px;

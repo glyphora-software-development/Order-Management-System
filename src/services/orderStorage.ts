@@ -16,6 +16,9 @@ export interface OrderItem {
 
 export interface SalesOrder {
   id: string;
+  /** 客户 ID。早期创建的订单没有此字段，需兼容 */
+  customerId?: string;
+  /** 下单时的客户名称快照，客户改名后历史订单不变 */
   customer: string;
   date: string;
   items: OrderItem[];
@@ -74,7 +77,7 @@ export function calculateTotal(items: OrderItem[]): number {
 export function createOrder(
   data: Pick<
     SalesOrder,
-    "customer" | "date" | "items" | "remarks" | "status"
+    "customerId" | "customer" | "date" | "items" | "remarks" | "status"
   >
 ): SalesOrder {
   const orders = getOrders();
@@ -102,4 +105,19 @@ export function updateOrderStatus(
       order.id === id ? { ...order, status } : order
     )
   );
+}
+
+/**
+ * 统计某客户已有的订单数。
+ * 新订单按 customerId 匹配；没有 customerId 的旧订单按名称匹配。
+ */
+export function countOrdersForCustomer(customer: {
+  id: string;
+  name: string;
+}): number {
+  return getOrders().filter((order) =>
+    order.customerId
+      ? order.customerId === customer.id
+      : order.customer === customer.name
+  ).length;
 }
