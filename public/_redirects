@@ -1,0 +1,19 @@
+# Cloudflare Pages application routes
+/login / 200
+/login/ / 200
+/orders / 200
+/orders/ / 200
+/orders/new / 200
+/orders/new/ / 200
+/customers / 200
+/customers/ / 200
+/products / 200
+/products/ / 200
+/reports / 200
+/reports/ / 200
+/demo / 200
+/demo/ / 200
+/orders/:orderId/documents/invoice / 200
+/orders/:orderId/documents/invoice/ / 200
+/orders/:orderId/documents/delivery / 200
+/orders/:orderId/documents/delivery/ / 200

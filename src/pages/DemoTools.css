@@ -1,0 +1,11 @@
+.demo-tools { min-width: 0; }
+.demo-panel { padding: var(--space-5); margin-bottom: var(--space-4); }
+.demo-panel h2 { margin: 0 0 10px; font-size: 17px; }
+.demo-panel :is(p,li) { color: var(--muted); line-height: 1.65; }
+.demo-panel li { margin: 6px 0; }
+.demo-panel ol { padding-inline-start: var(--space-5); }
+.demo-panel a { color: var(--brand); text-underline-offset: 2px; }
+.demo-counts { display: grid; grid-template-columns: repeat(auto-fit,minmax(90px,1fr)); gap: var(--space-2); }
+.demo-counts > div { padding: var(--space-3); background: var(--soft); border-radius: var(--control-radius); }
+.demo-counts dt { color: var(--muted); font-size: 12px; }
+.demo-counts dd { margin: 3px 0 0; font-weight: 700; font-size: 20px; }

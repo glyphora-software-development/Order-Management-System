@@ -1,0 +1,76 @@
+@page { size: A4 portrait; margin: 12mm; }
+
+.document-preview { max-width: 850px; margin-inline: auto; }
+.document-toolbar, .document-toolbar nav, .document-toolbar > div {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.document-toolbar { justify-content: space-between; margin-bottom: 16px; }
+.document-toolbar a { color: #1d4ed8; font-size: 13px; text-decoration: none; }
+.document-toolbar a[aria-current] { color: #0f172a; font-weight: 700; }
+.document-toolbar button { min-height: 36px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 13px; }
+.document-toolbar button:not(.orders-new-button) { background: #fff; color: #1e293b; }
+
+.document-sheet {
+  box-sizing: border-box; width: 100%; margin: 0 auto; padding: 40px;
+  background: #fff; color: #172338; font: 13px/1.45 "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  overflow-wrap: anywhere; border: 1px solid #dce4ee;
+}
+.document-sheet p { margin: 4px 0; }
+.document-header { display: flex; justify-content: space-between; gap: 24px; padding-bottom: 22px; border-bottom: 2px solid #263b60; }
+.document-brand { display: flex; align-items: flex-start; gap: 12px; }
+.document-mark {
+  display: inline-block; flex: 0 0 38px; height: 38px; text-align: center;
+  line-height: 38px; background: #263b60; color: #fff; font-size: 24px; font-weight: 700; border-radius: 7px;
+}
+.document-brand strong { font-size: 19px; }
+.document-brand p { color: #475569; font-size: 12px; }
+.document-identity { text-align: right; }
+.document-identity h1 { margin: 0 0 4px; font-size: 29px; line-height: 1.15; }
+.document-identity span { display: block; color: #475569; margin-top: 3px; }
+.document-addresses { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; padding: 20px 0; }
+.document-addresses h2 { font-size: 11px; text-transform: uppercase; color: #475569; margin: 0 0 5px; }
+.document-address { white-space: pre-wrap; }
+.document-addresses dl, .document-totals { margin: 0; }
+.document-addresses dl > div, .document-totals > div { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
+.document-sheet dd { margin: 0; text-align: right; font-weight: 600; }
+.document-sheet dt { color: #475569; }
+.document-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.document-table thead { display: table-header-group; }
+.document-table th, .document-table td { border-bottom: 1px solid #dbe4ef; padding: 7px 8px; text-align: left; vertical-align: top; }
+.document-table th { color: #fff; background: #263b60; font-size: 11px; }
+.document-table .document-numeric { text-align: right; font-variant-numeric: tabular-nums; }
+.document-table tr, .document-end, .document-header, .document-addresses { break-inside: avoid; }
+.document-end { margin-top: 22px; }
+.document-totals { margin-left: auto; width: min(100%, 330px); }
+.document-totals > .document-total { border-top: 1px solid #263b60; font-size: 15px; font-weight: 700; margin-top: 4px; padding-top: 6px; }
+.document-end > p { color: #475569; }
+.document-signatures { display: flex; gap: 30px; margin-top: 46px; }
+.document-signatures span { display: block; border-top: 1px solid #263b60; padding-top: 6px; flex: 1; }
+.document-footer {
+  display: flex; gap: 12px; justify-content: space-between;
+  margin-top: 26px; padding-top: 10px; border-top: 1px solid #dbe4ef; color: #475569; font-size: 11px;
+}
+
+.document-export-stage { position: absolute; left: -10000px; top: 0; pointer-events: none; }
+.document-raster-page { position: relative; width: 794px; height: 1123px; background: white; }
+.document-raster-page .document-sheet { min-height: 100%; border: 0; }
+.document-raster-page .document-footer { position: absolute; bottom: 34px; left: 40px; right: 40px; }
+
+@media screen and (max-width: 640px) {
+  .document-preview .document-sheet { padding: 15px; font-size: 11px; }
+  .document-preview .document-header, .document-preview .document-addresses { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .document-preview .document-identity { text-align: left; }
+  .document-preview .document-identity h1 { font-size: 23px; }
+  .document-preview .document-table th, .document-preview .document-table td { padding: 6px 3px; font-size: 10px; }
+  .document-preview .document-signatures { gap: 12px; }
+}
+
+@media print {
+  html:has(.document-preview), body:has(.document-preview), #root:has(.document-preview) { height: auto; min-width: 0; }
+  .app:has(.document-preview), .workspace:has(.document-preview), .workspace-content:has(.document-preview) {
+    display: block; height: auto; min-height: 0; overflow: visible; padding: 0; background: #fff;
+  }
+  .app:has(.document-preview) :is(.sidebar, .workspace-topbar, .workspace-statusbar, .document-toolbar, .orders-error) { display: none; }
+  .document-preview { max-width: none; }
+  .document-preview .document-sheet { border: 0; padding: 0; print-color-adjust: exact; }
+}

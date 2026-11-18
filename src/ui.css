@@ -1,0 +1,88 @@
+:where(button, input, select, textarea) { font: inherit; }
+button { cursor: pointer; }
+[disabled] { cursor: not-allowed; }
+:where(a,button,input,select,textarea,[tabindex]):focus-visible { outline: 2px solid #3867e3; outline-offset: 3px; }
+.sidebar :focus-visible, .mobile-menu :focus-visible { outline-color: #a7c3ff; }
+.ui-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); min-width: 0; }
+.ui-heading h1 { margin: 0; font-size: clamp(23px,2.4vw,32px); letter-spacing: -.035em; color: var(--ink); line-height: 1.2; }
+.ui-heading p { margin: 7px 0 0; color: var(--muted); line-height: 1.5; font-size: 13px; }
+.ui-actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); }
+.ui-actions-end { justify-content: flex-end; }
+.ui-button, .app :is(.master-primary,.orders-new-button) {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 36px; padding: 7px var(--space-3); border: 1px solid var(--line);
+  border-radius: var(--control-radius); color: var(--ink); background: #fff;
+  text-decoration: none; white-space: nowrap; font-size: 13px; font-weight: 650; line-height: 1.25;
+}
+.ui-button:hover { background: var(--soft); }
+.ui-button-primary, .app :is(.master-primary,.orders-new-button) { color: white; background: var(--brand); border-color: var(--brand); }
+.ui-button-primary:hover, .app :is(.master-primary,.orders-new-button):hover { background: var(--brand-hover); }
+.ui-button-danger { background: #b42332; border-color: #b42332; color: #fff; }
+.ui-button-danger:hover { background: #93202c; }
+.ui-button:disabled, .app :is(.master-primary,.orders-new-button):disabled { opacity: .55; }
+.ui-icon-button { display: inline-grid; place-items: center; min-height: 34px; min-width: 34px; border: 0; background: transparent; color: var(--ink); border-radius: 7px; font-size: 19px; }
+.ui-icon-button:hover { background: #8eace125; }
+.ui-card, .app :is(.orders-list-panel,.orders-detail-panel,.master-list-panel,.master-editor,.order-form-panel,.order-form-bottom,.report-panel) {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); min-width: 0;
+}
+.ui-table-scroll, .app :is(.master-table-scroll,.orders-table-scroll,.order-form-table-scroll,.report-table-scroll) { overflow: auto; max-width: 100%; }
+.ui-table-scroll:focus-visible { outline-offset: -2px; }
+.app :is(.ui-table,.orders-data-table,.master-table,.report-table,.order-form-table) { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+.app :is(.ui-table,.orders-data-table,.master-table,.report-table,.order-form-table) :is(th,td) {
+  padding: 11px 12px; border-bottom: 1px solid #e8eef6; text-align: left; vertical-align: middle;
+}
+.app :is(.ui-table,.orders-data-table,.master-table,.report-table,.order-form-table) th {
+  color: #465978; background: #f3f6fb; font-size: 12px; font-weight: 650; white-space: nowrap;
+}
+.app :is(.ui-table,.orders-data-table,.master-table,.report-table,.order-form-table) tbody tr:hover { background: #f7f9fd; }
+.app :is(.ui-table,.orders-data-table,.master-table,.report-table,.order-form-table) .ui-numeric { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ui-ellipsis { max-width: 23ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ui-link-button { background: none; border: 0; padding: 3px 0; color: #224cb6; font: inherit; font-weight: 650; text-decoration: underline; text-underline-offset: 2px; }
+.ui-toolbar, .app :is(.orders-toolbar,.master-toolbar,.report-filter) {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 14px; border-color: var(--line);
+}
+.ui-toolbar > span { color: var(--muted); }
+.app :is(.ui-toolbar,.orders-toolbar,.master-toolbar,.report-filter,.master-form,.order-form-panel,.orders-payment-form,.ui-dialog,.orders-detail-field)
+  :is(input:not([type=checkbox]), select, textarea) {
+  min-height: 36px; min-width: 0; max-width: 100%; padding: 7px 10px;
+  border: 1px solid #bccbe0; border-radius: var(--control-radius);
+  background: #fff; color: var(--ink); font-size: 13px; line-height: 1.35;
+}
+.app :is(.ui-toolbar,.orders-toolbar,.master-toolbar,.report-filter,.master-form,.order-form-panel,.orders-payment-form,.ui-dialog,.orders-detail-field)
+  :is(input,select,textarea):focus-visible { outline: 2px solid #3867e3; outline-offset: 2px; border-color: #3867e3; box-shadow: none; }
+.ui-field { display: grid; gap: 6px; font-size: 13px; font-weight: 650; }
+.ui-required { color: #a3233b; font-weight: 700; }
+.ui-field-error { color: #a3233b; font-size: 12px; margin: 0; }
+.ui-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 99px; font-size: 11px; font-weight: 650; white-space: nowrap; background: #eef2f8; color: #40516e; }
+.ui-status-pending, .ui-status-warning { background: #fff1d5; color: #713f12; }
+.ui-status-confirmed, .ui-status-processing { background: #e8efff; color: #2448a5; }
+.ui-status-shipped { background: #dff4f7; color: #135866; }
+.ui-status-completed, .ui-status-success { background: #def4e9; color: #14553b; }
+.ui-status-cancelled, .ui-status-danger { background: #fce9ed; color: #8b2134; }
+.ui-empty { display: grid; justify-items: center; gap: 6px; text-align: center; padding: 24px 12px; color: var(--muted); font-size: 12px; }
+.ui-empty-mark { font-weight: 700; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: var(--soft); color: #405885; }
+.ui-empty strong { color: var(--ink); font-size: 13px; }
+.ui-empty p { margin: 0; }
+.ui-feedback { padding: 9px 12px; border-radius: var(--control-radius); font-size: 13px; }
+.ui-feedback-error { background: #fce9ed; color: #852439; }
+.ui-loading { display: flex; align-items: center; gap: 10px; padding: 24px; color: var(--muted); }
+.ui-spinner { display: inline-block; width: 15px; height: 15px; border: 2px solid #ccd8ee; border-top-color: var(--brand); border-radius: 50%; animation: ui-spin 800ms linear infinite; }
+@keyframes ui-spin { to { transform: rotate(360deg); } }
+.ui-dialog { width: min(460px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow: auto; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; color: var(--ink); box-shadow: 0 18px 50px #14234135; }
+.ui-dialog::backdrop { background: #07132b76; }
+.ui-dialog-heading { display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 11px 15px; border-bottom: 1px solid var(--line); }
+.ui-dialog-heading h2 { font-size: 16px; margin: 0; }
+.ui-dialog-body { padding: 15px; display: grid; gap: 13px; }
+.ui-dialog-body p { margin: 0; overflow-wrap: anywhere; }
+.ui-pagination { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }
+.ui-toast-region { position: fixed; z-index: 10; bottom: 16px; right: 16px; width: min(320px, calc(100vw - 32px)); pointer-events: none; }
+.ui-toast { display: flex; align-items: center; gap: 8px; border: 1px solid #c4e6d7; border-radius: 10px; background: #effaf5; color: #144932; padding: 7px 9px 7px 13px; box-shadow: 0 6px 18px #16332622; pointer-events: auto; }
+.ui-toast button { margin-left: auto; color: inherit; }
+.ui-chart-bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ui-chart-bars li { display: grid; grid-template-columns: minmax(53px, 100px) minmax(10px, 1fr) auto; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); min-height: 22px; }
+.ui-chart-bars li > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui-chart-bars strong { font-size: 12px; color: var(--ink); text-align: right; }
+.ui-chart-track { border-radius: 5px; height: 8px; background: #ecf1f9; }
+.ui-chart-track i { display: block; height: 100%; border-radius: inherit; background: #4c72dd; }
+@media (max-width: 540px) { .ui-heading { align-items: flex-start; flex-wrap: wrap; margin-bottom: 17px; } }
+@media (prefers-reduced-motion: reduce) { .ui-spinner { animation: none; } }

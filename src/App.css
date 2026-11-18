@@ -1,490 +1,68 @@
-
 :root {
-  font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  --ink: #15233b; --muted: #536582; --line: #dee6f1; --surface: #fff;
+  --canvas: #f4f7fc; --soft: #eef3fa; --brand: #2557d6; --brand-hover: #1c45b2;
+  --nav: #142341; --nav-text: #e1e9fa; --radius: 12px; --control-radius: 7px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px;
+  --shadow: 0 2px 5px #14234108;
 }
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  min-width: 320px;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-/* ========================================
-   Main Application Layout
-======================================== */
-
-.app {
-  display: flex;
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  background: #f3f6fa;
-  color: #1e293b;
-}
-
-/* ========================================
-   Desktop Sidebar
-======================================== */
-
-.sidebar {
-  width: 236px;
-  min-width: 236px;
-  height: 100%;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  background: #202f46;
-  color: #e2e8f0;
-  padding: 0;
-  overflow: hidden;
-}
-
-/* Sidebar Brand */
-
-.sidebar-brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 25px 19px 33px;
-  flex-shrink: 0;
-}
-
+.app { display: flex; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; background: var(--canvas); color: var(--ink); font-size: 14px; }
+.sidebar { width: 227px; flex: 0 0 227px; height: 100%; display: flex; flex-direction: column; background: var(--nav); color: var(--nav-text); padding: 20px 14px 14px; }
+.sidebar-brand { display: flex; align-items: center; gap: 11px; padding: 4px 7px 26px; }
 .sidebar-brand-icon {
-  width: 37px;
-  height: 37px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  background: #4676ed;
-  border-radius: 9px;
-  font-size: 22px;
-  font-weight: 700;
-  color: white;
+  display: grid; place-items: center; flex: 0 0 36px; height: 36px;
+  background: #5281f4; color: #071531; border-radius: 10px; font-size: 22px; font-weight: 800;
 }
-
-.sidebar-brand strong {
-  display: block;
-  font-size: 18px;
-  color: #ffffff;
-  line-height: 1.3;
-}
-
-.sidebar-brand span {
-  display: block;
-  font-size: 9px;
-  letter-spacing: 1.3px;
-  color: #91a5bf;
-  margin-top: 4px;
-}
-
-/* Sidebar Section */
-
-.sidebar-section-title {
-  padding: 0 22px 13px;
-  font-size: 10px;
-  letter-spacing: 1.2px;
-  color: #91a5bf;
-  flex-shrink: 0;
-}
-
-/* Sidebar Navigation */
-
-.sidebar-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 0 11px;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex-shrink: 1;
-}
-
+.sidebar-brand strong { display: block; font-size: 17px; color: #fff; }
+.sidebar-brand span { display: block; margin-top: 2px; font-size: 10px; color: #afc0df; letter-spacing: .065em; }
+.sidebar-section-title { color: #a9bada; font-size: 11px; padding: 0 9px 9px; font-weight: 600; }
+.sidebar-menu { display: grid; gap: 4px; overflow-y: auto; }
 .sidebar-menu-item {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 12px 13px;
-  color: #b8c6d9;
-  font-size: 13px;
-  text-decoration: none;
-  border-radius: 7px;
-  transition: background 0.15s, color 0.15s;
-  white-space: nowrap;
-  flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px; position: relative; padding: 10px 11px;
+  min-height: 43px; border-radius: 7px; color: inherit; text-decoration: none; font-size: 13px;
 }
+.sidebar-menu-item:hover { background: #223558; }
+.sidebar-menu-item.active { background: #29446e; color: #fff; font-weight: 650; }
+.sidebar-menu-item.active::before { position: absolute; content: ""; inset-block: 11px; left: 0; width: 3px; background: #76a3ff; border-radius: 3px; }
+.sidebar-menu-icon { width: 20px; text-align: center; font-size: 17px; line-height: 1; color: #afc8ff; }
+.sidebar-spacer { flex: 1; }
+.sidebar-footer { border-top: 1px solid #314462; padding: 12px 5px 3px; display: grid; gap: 10px; }
+.sidebar-footer button { display: flex; align-items: center; gap: 9px; padding: 8px; border: 0; background: transparent; color: inherit; text-align: left; border-radius: 6px; }
+.sidebar-footer button:hover { background: #223558; }
+.sidebar-footer small { font-size: 10px; color: #a9bada; padding-left: 7px; }
+.workspace { display: flex; flex: 1; flex-direction: column; min-width: 0; height: 100%; }
+.workspace-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 62px; padding: 0 28px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.workspace-identity, .workspace-employee { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.workspace-product { font-weight: 700; white-space: nowrap; }
+.workspace-separator { color: #8291a9; }
+.workspace-location { color: var(--muted); white-space: nowrap; }
+.workspace-employee-name { max-width: 180px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.workspace-avatar { display: grid; place-items: center; height: 30px; width: 30px; flex: 0 0 30px; border-radius: 50%; background: #e9effe; color: #2448a5; font-weight: 700; }
+.workspace-demo { white-space: nowrap; }
+.workspace-content { flex: 1; min-height: 0; min-width: 0; overflow: auto; padding: 25px 28px 36px; }
+.workspace-content > * { max-width: 1550px; margin-inline: auto; }
+.workspace-content > .document-preview { max-width: 850px; }
+.workspace-statusbar { display: none; }
+.workspace-menu-button { display: none !important; }
+.skip-workspace { position: fixed; z-index: 10; left: 10px; top: 10px; transform: translateY(-180%); }
+.skip-workspace:focus { transform: none; }
+.mobile-menu.ui-dialog { margin: 0 auto 0 0; height: 100dvh; max-height: 100dvh; width: min(300px, 86vw); max-width: 100%; border: 0; border-radius: 0; background: var(--nav); color: var(--nav-text); }
+.mobile-menu .ui-dialog-heading { border-color: #314462; }
+.mobile-menu .ui-icon-button { color: #fff; }
+.mobile-menu .sidebar { width: 100%; height: calc(100% - 58px); padding-top: 12px; }
+.mobile-menu .sidebar-brand { padding-bottom: 15px; }
 
-.sidebar-menu-item:hover {
-  background: #2d415d;
-  color: #ffffff;
+@media screen and (max-width: 900px) {
+  .app > .sidebar { display: none; }
+  .workspace-menu-button { display: inline-flex !important; }
+  .workspace-content { padding: 19px 20px 28px; }
+  .workspace-topbar { padding-inline: 20px; }
 }
-
-.sidebar-menu-item.active {
-  background: #365b94;
-  color: #ffffff;
-  font-weight: 600;
+@media screen and (max-width: 520px) {
+  .workspace-topbar { padding-inline: 12px; min-height: 54px; }
+  .workspace-content { padding: 15px 12px 24px; }
+  .workspace-location, .workspace-separator, .workspace-employee-name { display: none; }
 }
-
-.sidebar-menu-icon {
-  width: 20px;
-  min-width: 20px;
-  text-align: center;
-  font-size: 19px;
-  line-height: 1;
-}
-
-/* Sidebar Scrollbar */
-
-.sidebar-menu::-webkit-scrollbar {
-  width: 5px;
-}
-
-.sidebar-menu::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar-menu::-webkit-scrollbar-thumb {
-  background: #455873;
-  border-radius: 5px;
-}
-
-/* Sidebar Bottom */
-
-.sidebar-spacer {
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-.sidebar-footer {
-  border-top: 1px solid #35455d;
-  padding: 12px 11px 18px;
-  flex-shrink: 0;
-}
-
-.sidebar-footer button {
-  background: transparent;
-  border: none;
-  color: #b8c6d9;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 12px 13px;
-  text-align: left;
-  border-radius: 7px;
-  font-size: 13px;
-  transition: background 0.15s, color 0.15s;
-}
-
-.sidebar-footer button:hover {
-  background: #2d415d;
-  color: #ffffff;
-}
-
-.sidebar-footer small {
-  display: block;
-  font-size: 10px;
-  color: #7488a4;
-  padding: 18px 13px 0;
-}
-
-/* ========================================
-   Workspace
-======================================== */
-
-.workspace {
-  flex: 1;
-  min-width: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: #f3f6fa;
-}
-
-/* ========================================
-   Top Toolbar
-======================================== */
-
-.workspace-topbar {
-  height: 57px;
-  min-height: 57px;
-  flex-shrink: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  background: #ffffff;
-  padding: 0 25px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-/* Workspace Identity */
-
-.workspace-identity {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-size: 12px;
-  color: #64748b;
-  min-width: 0;
-}
-
-.workspace-product {
-  color: #1e293b;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.workspace-separator {
-  color: #cbd5e1;
-}
-
-/* Employee Information */
-
-.workspace-employee {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  flex-shrink: 0;
-}
-
-.online-dot {
-  width: 7px;
-  height: 7px;
-  flex-shrink: 0;
-  background: #22c55e;
-  display: inline-block;
-  border-radius: 50%;
-  margin-right: 5px;
-}
-
-.employee-role {
-  color: #64748b;
-  background: #f1f5f9;
-  padding: 5px 9px;
-  border-radius: 5px;
-  white-space: nowrap;
-}
-
-/* ========================================
-   Main Workspace Content
-======================================== */
-
-.workspace-content {
-  flex: 1;
-  min-height: 0;
-  min-width: 0;
-  width: 100%;
-  padding: 25px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  text-align: left;
-}
-
-.workspace-content > * {
-  min-width: 0;
-}
-
-/* Workspace Scrollbar */
-
-.workspace-content::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.workspace-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.workspace-content::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 8px;
-}
-
-.workspace-content::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* ========================================
-   Status Bar
-======================================== */
-
-.workspace-statusbar {
-  height: 31px;
-  min-height: 31px;
-  flex-shrink: 0;
-  padding: 0 17px;
-  border-top: 1px solid #dce3eb;
-  background: #e9eef5;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  color: #64748b;
-  font-size: 10px;
-}
-
-.workspace-statusbar > span {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-}
-
-/* ========================================
-   Focus & Accessibility
-======================================== */
-
-.sidebar-menu-item:focus-visible,
-.sidebar-footer button:focus-visible {
-  outline: 2px solid #93c5fd;
-  outline-offset: -2px;
-}
-
-/* ========================================
-   Smaller Desktop Windows
-======================================== */
-
-@media (max-width: 1100px) {
-  .sidebar {
-    width: 210px;
-    min-width: 210px;
-  }
-
-  .workspace-content {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 850px) {
-  .sidebar {
-    width: 190px;
-    min-width: 190px;
-  }
-
-  .sidebar-brand {
-    padding: 22px 14px 28px;
-  }
-
-  .sidebar-brand strong {
-    font-size: 16px;
-  }
-
-  .sidebar-menu {
-    padding: 0 8px;
-  }
-
-  .sidebar-menu-item {
-    padding: 11px 10px;
-    gap: 10px;
-  }
-
-  .workspace-topbar {
-    padding: 0 16px;
-  }
-
-  .workspace-content {
-    padding: 15px;
-  }
-}
-
-@media (max-width: 600px) {
-  .sidebar {
-    width: 65px;
-    min-width: 65px;
-  }
-
-  .sidebar-brand {
-    justify-content: center;
-    padding: 20px 8px 28px;
-  }
-
-  .sidebar-brand > div:last-child,
-  .sidebar-section-title,
-  .sidebar-menu-item > span:last-child,
-  .sidebar-footer small {
-    display: none;
-  }
-
-  .sidebar-menu {
-    padding: 0 7px;
-  }
-
-  .sidebar-menu-item {
-    justify-content: center;
-    padding: 13px 8px;
-  }
-
-  .sidebar-menu-icon {
-    width: 22px;
-    min-width: 22px;
-  }
-
-  .sidebar-footer {
-    padding: 10px 7px;
-  }
-
-  .sidebar-footer button {
-    justify-content: center;
-    font-size: 0;
-    padding: 12px 8px;
-  }
-
-  .sidebar-footer button span {
-    font-size: 19px;
-  }
-
-  .workspace-topbar {
-    height: 50px;
-    min-height: 50px;
-    padding: 0 12px;
-  }
-
-  .workspace-identity {
-    gap: 6px;
-  }
-
-  .workspace-identity > span:last-child,
-  .workspace-separator,
-  .employee-role {
-    display: none;
-  }
-
-  .workspace-content {
-    padding: 12px;
-  }
-
-  .workspace-statusbar {
-    padding: 0 10px;
-  }
-
-  .workspace-statusbar > span:last-child {
-    display: none;
-  }
+@media print {
+  .skip-workspace, .ui-toast-region { display: none !important; }
+  .workspace-content > .document-preview { max-width: none; }
 }

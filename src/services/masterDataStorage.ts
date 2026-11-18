@@ -8,17 +8,7 @@ export interface Customer {
   createdAt: string;
 }
 
-export interface Product {
-  id: string;
-  sku: string;
-  name: string;
-  price: number;
-  active: boolean;
-  createdAt: string;
-}
-
-const CUSTOMER_KEY = "glyphora-oms-customers";
-const PRODUCT_KEY = "glyphora-oms-products";
+export const CUSTOMER_KEY = "glyphora-oms-customers";
 
 function readData<T>(key: string): T[] {
   try {
@@ -26,9 +16,10 @@ function readData<T>(key: string): T[] {
     if (!raw) return [];
 
     const parsed: unknown = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as T[]) : [];
+    if (!Array.isArray(parsed)) throw new Error("Invalid customer directory");
+    return parsed as T[];
   } catch {
-    return [];
+    throw new Error("无法读取客户资料，原始数据已保留。");
   }
 }
 
@@ -39,7 +30,12 @@ function writeData<T>(key: string, data: T[]): void {
 // Customers
 
 export function getCustomers(): Customer[] {
-  return readData<Customer>(CUSTOMER_KEY);
+  const customers = readData<Customer>(CUSTOMER_KEY);
+  if (customers.some((entry) => !entry || [entry.id, entry.name, entry.phone, entry.email, entry.address, entry.createdAt]
+    .some((field) => typeof field !== "string"))) {
+    throw new Error("客户资料格式无效，原始数据已保留。");
+  }
+  return customers;
 }
 
 export function saveCustomer(
@@ -76,58 +72,5 @@ export function deleteCustomer(id: string): void {
   writeData(
     CUSTOMER_KEY,
     getCustomers().filter((c) => c.id !== id)
-  );
-}
-
-// Products
-
-export function getProducts(): Product[] {
-  return readData<Product>(PRODUCT_KEY);
-}
-
-export function saveProduct(
-  data: Omit<Product, "id" | "createdAt">,
-  id?: string
-): Product {
-  const products = getProducts();
-
-  const duplicate = products.some(
-    (p) =>
-      p.sku.toLowerCase() === data.sku.toLowerCase() &&
-      p.id !== id
-  );
-
-  if (duplicate) {
-    throw new Error("商品编号 SKU 已存在");
-  }
-
-  if (id) {
-    const existing = products.find((p) => p.id === id);
-    if (!existing) throw new Error("商品不存在");
-
-    const updated: Product = { ...existing, ...data };
-
-    writeData(
-      PRODUCT_KEY,
-      products.map((p) => (p.id === id ? updated : p))
-    );
-
-    return updated;
-  }
-
-  const product: Product = {
-    ...data,
-    id: crypto.randomUUID(),
-    createdAt: new Date().toISOString(),
-  };
-
-  writeData(PRODUCT_KEY, [product, ...products]);
-  return product;
-}
-
-export function deleteProduct(id: string): void {
-  writeData(
-    PRODUCT_KEY,
-    getProducts().filter((p) => p.id !== id)
   );
 }

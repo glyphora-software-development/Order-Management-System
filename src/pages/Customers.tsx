@@ -1,11 +1,12 @@
 
-import { useState, type FormEvent } from "react";
-import {
-  getCustomers,
-  saveCustomer,
-  deleteCustomer,
-  type Customer,
-} from "../services/masterDataStorage";
+import { useRef, useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
+import type { Customer } from "../services/masterDataStorage";
+import { useCustomerDirectory } from "../components/useCustomerDirectory";
+import { ConfirmDialog, EmptyState, PageHeader, TableScroll } from "../components/ui";
+import { Pagination } from "../components/Pagination";
+import { useListPage } from "../components/listPage";
+import { useToast } from "../components/toastContext";
 import "./MasterData.css";
 
 type CustomerForm = Pick<
@@ -21,15 +22,20 @@ const emptyForm: CustomerForm = {
 };
 
 function Customers() {
-  const [customers, setCustomers] = useState(getCustomers);
+  const { customers, save, remove } = useCustomerDirectory();
   const [search, setSearch] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<CustomerForm>(emptyForm);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<Customer>();
+  const [nameError, setNameError] = useState("");
+  const nameInput = useRef<HTMLInputElement>(null);
+  const saving = useRef(false);
+  const [busy, setBusy] = useState(false);
+  const toast = useToast();
 
   const filtered = customers.filter((customer) => {
-    const query = search.toLowerCase();
+    const query = search.trim().toLowerCase();
     return (
       customer.name.toLowerCase().includes(query) ||
       customer.phone.toLowerCase().includes(query) ||
@@ -37,11 +43,14 @@ function Customers() {
     );
   });
 
-  function startNew() {
+  const page = useListPage(filtered, search);
+
+  function startNew(focus = false) {
     setEditingId(null);
     setForm({ ...emptyForm });
     setError("");
-    setMessage("");
+    setNameError("");
+    if (focus) nameInput.current?.focus();
   }
 
   function startEdit(customer: Customer) {
@@ -53,19 +62,24 @@ function Customers() {
       address: customer.address,
     });
     setError("");
-    setMessage("");
+    setNameError("");
+    nameInput.current?.focus();
   }
 
-  function handleSave(event: FormEvent<HTMLFormElement>) {
+  async function handleSave(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (saving.current) return;
 
     if (!form.name.trim()) {
-      setError("请输入客户名称");
+      setNameError("请输入客户名称");
+      nameInput.current?.focus();
       return;
     }
 
+    saving.current = true;
+    setBusy(true);
     try {
-      saveCustomer(
+      await save(
         {
           name: form.name.trim(),
           phone: form.phone.trim(),
@@ -75,47 +89,27 @@ function Customers() {
         editingId ?? undefined
       );
 
-      setCustomers(getCustomers());
       startNew();
-      setMessage("客户资料已保存");
-    } catch {
-      setError("保存失败，请检查本地存储");
+      toast("客户资料已保存");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "保存失败，请检查本地存储");
+    } finally {
+      saving.current = false;
+      setBusy(false);
     }
   }
 
-  function handleDelete(customer: Customer) {
-    if (
-      !window.confirm(`确定删除客户「${customer.name}」吗？`)
-    ) {
-      return;
-    }
-
-    try {
-      deleteCustomer(customer.id);
-      setCustomers(getCustomers());
-      if (editingId === customer.id) startNew();
-      setMessage("客户已删除");
-      setError("");
-    } catch {
-      setError("删除失败");
-    }
+  async function handleDelete(customer: Customer) {
+    await remove(customer.id);
+    if (editingId === customer.id) startNew();
+    toast("客户已删除");
+    setError("");
   }
 
   return (
     <div className="master-page">
-      <div className="master-heading">
-        <div>
-          <div className="sales-breadcrumb">
-            销售管理 / 客户管理
-          </div>
-          <h1>客户管理</h1>
-          <p>维护公司客户资料和联系方式</p>
-        </div>
-        <button className="master-primary" onClick={startNew}>
-          + 新增客户
-        </button>
-      </div>
-
+      <PageHeader title="客户管理" description="维护公司客户资料和联系方式"
+        actions={<button type="button" className="ui-button ui-button-primary" disabled={busy} onClick={() => startNew(true)}>＋ 新增客户</button>} />
       <div className="master-layout">
         <section className="master-list-panel">
           <div className="master-toolbar">
@@ -129,7 +123,7 @@ function Customers() {
             <span>共 {filtered.length} 位客户</span>
           </div>
 
-          <div className="master-table-scroll">
+          <TableScroll label="客户列表">
             <table className="master-table">
               <thead>
                 <tr>
@@ -140,19 +134,21 @@ function Customers() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((customer) => (
+                {page.rows.map((customer) => (
                   <tr key={customer.id}>
-                    <td className="master-name">{customer.name}</td>
+                    <td className="master-name ui-ellipsis" title={customer.name}>{customer.name}</td>
                     <td>{customer.phone || "—"}</td>
-                    <td>{customer.email || "—"}</td>
+                    <td className="ui-ellipsis" title={customer.email}>{customer.email || "—"}</td>
                     <td>
                       <div className="master-row-actions">
-                        <button onClick={() => startEdit(customer)}>
+                        <Link to={"/orders?customer=" + encodeURIComponent(customer.id)}>历史订单</Link>
+                        <button disabled={busy} onClick={() => startEdit(customer)}>
                           编辑
                         </button>
                         <button
                           className="master-danger-text"
-                          onClick={() => handleDelete(customer)}
+                          disabled={busy}
+                          onClick={() => setDeleteTarget(customer)}
                         >
                           删除
                         </button>
@@ -163,14 +159,10 @@ function Customers() {
               </tbody>
             </table>
 
-            {filtered.length === 0 && (
-              <div className="master-empty">
-                {customers.length === 0
-                  ? "暂无客户资料，请先添加客户"
-                  : "没有符合条件的客户"}
-              </div>
-            )}
-          </div>
+          </TableScroll>
+          {filtered.length === 0 && <EmptyState title={customers.length ? "没有符合条件的客户" : "暂无客户资料"}
+            detail={customers.length ? "试着搜索客户名称、电话或邮箱。" : "可从表单添加客户。"} />}
+          <Pagination {...page} count={filtered.length} />
         </section>
 
         <aside className="master-editor">
@@ -181,15 +173,17 @@ function Customers() {
 
           <form onSubmit={handleSave} className="master-form">
             <label>
-              客户名称 <span>*</span>
+              <span>客户名称 <span className="ui-required" aria-hidden="true">*</span></span>
               <input
+                ref={nameInput}
                 value={form.name}
-                onChange={(e) =>
-                  setForm({ ...form, name: e.target.value })
-                }
+                aria-invalid={Boolean(nameError)}
+                aria-describedby={nameError ? "customer-name-error" : undefined}
+                onChange={(e) => { setNameError(""); setForm({ ...form, name: e.target.value }); }}
                 placeholder="例如：ABC Trading Sdn. Bhd."
                 required
               />
+              {nameError && <small id="customer-name-error" className="ui-field-error" role="alert">{nameError}</small>}
             </label>
 
             <label>
@@ -228,20 +222,21 @@ function Customers() {
               />
             </label>
 
-            {error && <p className="master-error" role="alert">{error}</p>}
-            {message && <p className="master-success" role="status">{message}</p>}
+            {error && <p className="ui-feedback ui-feedback-error" role="alert">{error}</p>}
 
             <div className="master-form-actions">
-              <button type="button" onClick={startNew}>
+              <button className="ui-button" type="button" disabled={busy} onClick={() => startNew()}>
                 清空
               </button>
-              <button type="submit" className="master-primary">
+              <button type="submit" className="master-primary" disabled={busy}>
                 保存客户
               </button>
             </div>
           </form>
         </aside>
       </div>
+      {deleteTarget && <ConfirmDialog title="删除客户" detail={"确定删除「" + deleteTarget.name + "」？历史订单会保留原客户快照。"}
+        confirmLabel="确认删除" onClose={() => setDeleteTarget(undefined)} onConfirm={() => handleDelete(deleteTarget)} />}
     </div>
   );
 }
