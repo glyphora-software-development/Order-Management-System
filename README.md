@@ -74,3 +74,17 @@ Vite copies `public/_redirects` and `public/404.html` into the deployment output
 This demo uses browser isolation per site origin and browser profile. Shared accounts, server synchronization, payment gateways, refunds, returns, and production tax invoicing are outside its scope. Use fictional entries. Clearing browser site data can remove the local workspace.
 
 PDF downloads rasterize the layout to preserve Chinese and English glyphs. Choose **打印** and the browser's Save as PDF option for selectable text. Android hardware verification is pending. Desktop browsers were exercised at 390, 768, 1280, and 1920 CSS pixels.
+
+## Tauri desktop application
+
+The desktop application wraps the same OMS V2 React workspace. Its orders, receipts, inventory, documents and reports use the existing browser storage layer inside the system WebView. Desktop and hosted Web workspaces have independent local data.
+
+Install Rust 1.90 or newer, the Windows C++ build tools and WebView2, then run:
+
+```sh
+npm ci
+npm run tauri dev
+npm run tauri build
+```
+
+The Tauri development window uses http://localhost:5173. Vite keeps that port fixed. Release assets come from dist. Native PDF download and printing require validation in the packaged WebView in addition to the browser tests.
